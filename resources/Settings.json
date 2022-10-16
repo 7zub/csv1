@@ -1,0 +1,12 @@
+{
+  "routes": [{
+    "Name": "all files",
+    "path_from": "C:/Users/Samir/Desktop/all/",
+    "path_to": "C:/Users/Samir/Desktop/in/"
+  },
+  {
+    "Name": "csv",
+    "path_from": "C:/Users/Samir/Desktop/c/",
+    "path_to": "C:/Users/Samir/Desktop/in/"
+  }]
+}
