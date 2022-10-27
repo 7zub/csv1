@@ -3,9 +3,13 @@ package cs.start;
 import cs.model.MSettings;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.camel.CamelContext;
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.model.dataformat.CsvDataFormat;
+
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class Main {
@@ -24,7 +28,7 @@ public class Main {
         }
 
         ctx.start();
-        Thread.sleep(21000);
+        Thread.sleep(71000);
     }
 
     private static MSettings JsonSettings()
@@ -50,22 +54,25 @@ public class Main {
                         .to("file://" + to)
                 .unmarshal(csv)
                 .convertBodyTo(List.class)
-                .process(exchange -> {
-                    @SuppressWarnings("unchecked")
-                    List<List<String>> data = (List<List<String>>) exchange.getIn().getBody();
-
-                    for (List<String> line : data) {
-                        for (String s : line) {
-                            System.out.print(". " + s);
-                        }
-                        System.out.println();
-                    }
-                })
+                .process(Main::CamelProcess)
                 ;
             }
         };
 
         ctx.addRoutes(route);
         //ctx.stop();
+    }
+
+    public static void CamelProcess(Exchange exch)
+    {
+        @SuppressWarnings("unchecked")
+        List<List<String>> data = (List<List<String>>) exch.getIn().getBody();
+
+        for (List<String> line : data) {
+            for (String s : line) {
+                System.out.print(". " + s);
+            }
+            System.out.println();
+        }
     }
 }
